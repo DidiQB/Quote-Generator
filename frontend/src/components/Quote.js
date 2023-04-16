@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Gallery from './Gallery';
+import Favorites from './Favorites';
 
 const Quote = () => {
     const [quotes, setQuotes] = useState("Generate your Quote");
@@ -9,8 +10,8 @@ const Quote = () => {
     const getQuote = (event) => {
         // event.preventDefault();
 
-        const colors = ["#D8E2DB", "#F8ECEA", "#FAE1DD", "#DED6CE", "#FEC5BB", "#F4EBE0"];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const colors = ["#D77349", "#D3927C", "#E2A780", "#D6714D", "#C55D52", "#D1896A"];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)]; 
         setColor(randomColor);
 
         const options = {
@@ -32,8 +33,27 @@ const Quote = () => {
 
         }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setSavedQuote(quotes);
+        
+        try {
+            const response = await fetch("http://127.0.0.1:3001/quote", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(quotes),
+            });
+        
+            if (!response.ok) {
+                throw new Error("Failed to save quote");
+            }
+        
+            // handle response if needed
+        } catch (error) {
+            // handle error if needed
+            throw new Error("Something went wrong when posting to /quote");
+        }
 
     }        
 
@@ -48,16 +68,16 @@ const Quote = () => {
             <div className='quote' style={{ backgroundColor: color }}>
                 <div className="heart">
                     <button className='heart__button' onClick={handleSave}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-heart-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+</svg>
                     </button>
                 </div>
                 <div className="quote__text">
                     <p>{quotes.text}</p>
                 </div>
                 <div className="quote__author">
-                    <p>{quotes.author}</p>
+                    <p>- {quotes.author}</p>
                 </div>
                 <div className='btn__container'>
                     <button onClick={getQuote} className="btn">Get Random Quote</button>
@@ -66,7 +86,7 @@ const Quote = () => {
             </div>
             <br />
             <Gallery savedQuote={savedQuote} />
-
+            <Favorites savedQuote={savedQuote}/>
         </div>
     );
 }

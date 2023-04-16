@@ -1,13 +1,13 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import Quote from './components/Quote';
+import Favorites from './components/Favorites'
 
 function App() {
-  
 
   return (
+
     <>
-    {/* <div style={{ backgroundColor: "#F7F2ED" }}></div> */}
     <Quote />
     </>
   );
