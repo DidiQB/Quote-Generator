@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import Gallery from './Gallery';
+// import Gallery from './Gallery';
 import Favorites from './Favorites';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 const Quote = () => {
     const [quotes, setQuotes] = useState("Generate your Quote");
@@ -14,9 +16,14 @@ const Quote = () => {
         const randomColor = colors[Math.floor(Math.random() * colors.length)]; 
         setColor(randomColor);
 
+        const apiKey = process.env.REACT_APP_API_KEY;
+        const hostKey = process.env.REACT_APP_HOST_KEY;
+
         const options = {
             method: 'GET',
             headers: {
+                // 'X-RapidAPI-Key': apiKey,
+                // 'X-RapidAPI-Host': hostKey
                 'X-RapidAPI-Key': 'e821ea0b2bmsh1ef1acb423ad9aap187f9ajsne5e65b612fa3',
                 'X-RapidAPI-Host': 'famous-quotes4.p.rapidapi.com'
             }
@@ -85,7 +92,7 @@ const Quote = () => {
                 </div>
             </div>
             <br />
-            <Gallery savedQuote={savedQuote} />
+            {/* <Gallery savedQuote={savedQuote} /> */}
             <Favorites savedQuote={savedQuote}/>
         </div>
     );
